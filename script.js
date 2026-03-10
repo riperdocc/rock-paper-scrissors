@@ -1,4 +1,5 @@
 let humanScore = 0;
+let humanChoice = "";
 let computerScore = 0;
 
 function getRandomInt(max) {
@@ -10,16 +11,6 @@ function getComputerChoice() {
     choices.push("rock", "paper", "scissors")
 
     let choice = choices[getRandomInt(3)];
-    return choice
-}
-
-function getHumanChoice() {
-    const choices = [];
-    choices.push("rock", "paper", "scissors")
-
-    const getChoice = Number(window.prompt("Rock : 0, Paper : 1, Scissors: 2", ""));
-    let choice = choices[getChoice];
-
     return choice
 }
 
@@ -72,25 +63,56 @@ function playRound(humanChoice, computerChoice) {
     if (humanChoice == 'scissors' && computerChoice == 'scissors') {
         console.log("Remis!")
     }
+    document.getElementById("user-score").textContent = humanScore;
+    document.getElementById("computer-score").textContent = computerScore;
     printScores();
 
 }
 
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        const humanSelection = getHumanChoice()
-        const computerSelection = getComputerChoice()
+const rockButton = document.querySelector("#rock");
+rockButton.addEventListener("click", () => {
+    humanChoice = 'rock';
+    console.log(humanChoice);
+});
 
-        playRound(humanSelection, computerSelection)
-    }
+const paperButton = document.querySelector("#paper");
+paperButton.addEventListener("click", () => {
+    humanChoice = 'paper';
+    console.log(humanChoice);
+});
+
+const scissorsButton = document.querySelector("#scissors");
+scissorsButton.addEventListener("click", () => {
+    humanChoice = 'scissors';
+    console.log(humanChoice);
+});
+
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        playGame(humanChoice);
+    })
+})
+
+function playGame(buttonClicked) {
+    const humanSelection = buttonClicked
+    const computerSelection = getComputerChoice()
+
+    playRound(humanSelection, computerSelection)
+
+    const humanWinner = document.querySelector("div.user-score");
+    const computerWinner = document.querySelector("div.computer-score");
     
-    if (humanScore > computerScore) {
-        console.log('\n')
-        console.log("Gratulacje wygrałeś!")
-    } else {
-        console.log('\n')
-        console.log("Komputer wygrał!")
+    if (humanScore == 5) {
+        humanWinner.style.backgroundColor = "green";
+        computerWinner.style.backgroundColor = "red";
+        document.getElementById("user-score").textContent = 0;
+        document.getElementById("computer-score").textContent = 0;
+    } else if (computerScore == 5) {
+        computerWinner.style.backgroundColor = "green";
+        humanWinner.style.backgroundColor = "red";
+        document.getElementById("user-score").textContent = 0;
+        document.getElementById("computer-score").textContent = 0;
     }
 }
-
-playGame()
